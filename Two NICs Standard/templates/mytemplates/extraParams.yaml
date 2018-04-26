@@ -1,0 +1,72 @@
+resource_registry:
+   OS::TripleO::Compute::Net::SoftwareConfig: /home/stack/templates/mytemplates/nic-configs/compute.yaml
+   OS::TripleO::Controller::Net::SoftwareConfig: /home/stack/templates/mytemplates/nic-configs/controller.yaml
+   OS::TripleO::CephStorage::Net::SoftwareConfig: /home/stack/templates/mytemplates/nic-configs/ceph-storage.yaml
+   OS::TripleO::NodeUserData: /home/stack/templates/mytemplates/first-boot/wipe-disks.yaml
+parameter_defaults:
+  ControlPlaneSubnetCidr: "24"
+  ControlPlaneDefaultRoute: 10.2.2.14
+  EC2MetadataIp: 
+  DnsServers: ['192.168.2.14','8.8.8.8']
+# Customize all these values to match the local environment
+  InternalApiNetCidr: 192.168.5.0/24
+  StorageNetCidr: 192.168.7.0/24
+  StorageMgmtNetCidr: 192.168.8.0/24
+  TenantNetCidr: 192.168.111.0/24
+  ExternalNetCidr: 192.168.2.128/25
+  InternalApiAllocationPools: [{'start': '192.168.5.100', 'end': '192.168.5.200'}]
+  StorageAllocationPools: [{'start': '192.168.7.10', 'end': '192.168.7.200'}]
+  StorageMgmtAllocationPools: [{'start': '192.168.8.10', 'end': '192.168.8.200'}]
+  TenantAllocationPools: [{'start': '192.168.111.10', 'end': '192.168.111.200'}]
+# Use an External allocation pool which will leave room for floating IPs
+  ExternalAllocationPools: [{'start': '192.168.2.150', 'end': '192.168.2.175'}]
+  InternalApiNetworkVlanID: 101
+  StorageNetworkVlanID: 105
+  StorageMgmtNetworkVlanID: 104
+  TenantNetworkVlanID: 106
+  ExternalNetworkVlanID: 100
+# Set to the router gateway on the external network
+  ExternalInterfaceDefaultRoute: 192.168.2.14
+# Customize bonding options if required (will be ignored if bonds are not used)
+  BondInterfaceOvsOptions: 'balance-slb lacp=off'
+  NeutronExternalNetworkBridge: "''"
+  NeutronBridgeMappings: "datacentre:br-ex"
+  NeutronNetworkVLANRanges: 'datacentre:1:1000'
+  NeutronTunnelTypes: 'gre'
+  TimeZone: 'Europe/London'
+#Monitoring Parameters
+  MonitoringRabbitHost: 10.2.2.201
+  MonitoringRabbitPort: 5672
+  MonitoringRabbitUserName: sensu
+  MonitoringRabbitPassword: sensu
+  MonitoringRabbitUseSSL: false
+  MonitoringRabbitVhost: "/sensu"
+#Logging
+  LoggingServers:
+    - host: 10.2.2.202
+      port: 24224
+  parameter_defaults:
+#  ExtraConfig:
+#    ceph::profile::params::osd_journal_size: 5120
+#    ceph::profile::params::osds:
+#        '/dev/sdb':
+#          journal: '/dev/sdl1'
+#        '/dev/sdc':
+#          journal: '/dev/sdm1'
+#        '/dev/sdd':
+#          journal: '/dev/sdl2'
+#        '/dev/sde':
+#          journal: '/dev/sdm2'
+#        '/dev/sdf':
+#          journal: '/dev/sdl3'
+#        '/dev/sdg':
+#          journal: '/dev/sdm3'
+#        '/dev/sdh':
+#          journal: '/dev/sdl4'
+#        '/dev/sdi':
+#          journal: '/dev/sdm4'
+#        '/dev/sdj':
+#          journal: '/dev/sdl5'
+#        '/dev/sdk':
+#          journal: '/dev/sdm5'
+
